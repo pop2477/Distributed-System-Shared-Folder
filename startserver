@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#Only for MACOS
+
+#Kill process using needed port
+kill -9 $(lsof -ti:1099)
+echo "Previous Registry Killed"
+
+#Start rmi registry
+rmiregistry & 
+echo "Registry Started"
+
+#Compile java files
+javac *.java
+
+#Build path to current directory
+path="'" 
+path+=$(pwd) 
+path+="'"
+
+#Open new tab and run server code
+osascript -e 'tell app "Terminal"
+    do script "cd '"$path"' 
+    java Server"
+end tell'
+
+#Wait 3 second fro server to bind to port
+sleep 3
+
+#Open new tab and run client code
+osascript -e 'tell app "Terminal"
+    do script "cd '"$path"'
+    java Client"
+end tell'
